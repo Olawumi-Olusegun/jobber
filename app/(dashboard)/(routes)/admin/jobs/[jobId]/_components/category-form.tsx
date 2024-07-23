@@ -56,7 +56,7 @@ const CategoryForm = ({initialData, jobId, options }: CategoryFormProps) => {
   return (
     <div className='mt-4 border bg-neutral-100 rounded-md p-4'>
         <div className="font-medium flex items-center justify-between mb-2">
-            Job Category
+            Category
             <Button variant={"ghost"} onClick={toggleEditing}>
                 {isEditing 
                 ? "Cancel" 

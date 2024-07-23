@@ -42,11 +42,11 @@ const Combobox = ({options, value, onChange, heading}: ComboBoxProps) =>  {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0 md:min-w-96">
-        
+
         <Command>
           <div className="w-full px-2 py-1 flex items-center borer rounded-md">
               <Search className="mr-2 h-4 w-4 text-gray-500" />
-              <input onChange={handleSearchTerm} placeholder="Search category..." className="flex-1 w-full text-gray-700 outline-none border-none text-sm py-1" />
+              <input onChange={handleSearchTerm} placeholder="Search..." className="flex-1 w-full text-gray-700 outline-none border-none text-sm py-1" />
           </div>
 
           <CommandList>
@@ -78,7 +78,7 @@ const Combobox = ({options, value, onChange, heading}: ComboBoxProps) =>  {
                     />
                   ))
                 ) 
-                : <CommandEmpty>No category found.</CommandEmpty>
+                : <CommandEmpty>No search found.</CommandEmpty>
               }
             </CommandGroup>
           </CommandList>

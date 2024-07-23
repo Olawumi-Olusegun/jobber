@@ -11,6 +11,10 @@ import TitleForm from './_components/title-form';
 import CategoryForm from './_components/category-form';
 import ImageForm from './_components/image-form';
 import ShortDescription from './_components/short-description';
+import ShiftTimingModeForm from './_components/shift-timing-mode';
+import HourlyRateForm from './_components/Hourly-rate-form';
+import WorkModeModeForm from './_components/work-mode-form';
+import WorkExperienceForm from './_components/work-experience';
 
 const JobDetailsPage = async ({params}: {params: { jobId: string }}) => {
   const isValidObjectId = /^[0-9a-fA-F]{24}$/;
@@ -87,6 +91,10 @@ const JobDetailsPage = async ({params}: {params: { jobId: string }}) => {
             <CategoryForm initialData={job} jobId={job.id} options={options} />
             <ImageForm initialData={job} jobId={job.id} />
             <ShortDescription initialData={job} jobId={job.id}/>
+            <ShiftTimingModeForm initialData={job} jobId={job.id}/>
+            <HourlyRateForm initialData={job} jobId={job.id}/>
+            <WorkModeModeForm initialData={job} jobId={job.id}/>
+            <WorkExperienceForm initialData={job} jobId={job.id}/>
           </div>
         </div>
     </div>

@@ -78,10 +78,10 @@ const ShortDescription = ({initialData, jobId }: ShortDescriptionFormProps) => {
             Short Description
             <Button variant={"ghost"} onClick={toggleEditing}>
                 {isEditing 
-                ? "Cancel" 
+                ? "Cancel"
                 : <>
                     <Pencil className='w-4 h-4 mr-2' />
-                    Edit
+                    <span>Edit</span>
                   </>
                 }
             </Button>

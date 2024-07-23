@@ -1,7 +1,7 @@
 "use client";
 
 import { BookMarked, Compass, Home, List, LucideProps, User } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import React from 'react'
 import SidebarRouteItem from './sidebar-route-item';
 
@@ -63,7 +63,6 @@ const guestRoutes = [
 
 const SidebarRoutes = () => {
     const pathname = usePathname();
-    const router = useRouter();
 
     const isAdminRoute = pathname?.startsWith("/admin");
 

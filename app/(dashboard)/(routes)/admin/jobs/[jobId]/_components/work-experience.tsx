@@ -1,9 +1,12 @@
+
 "use client";
 
 import { Button } from '@/components/ui/button';
+import Combobox from '@/components/ui/combox-box';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Job } from '@prisma/client';
 import axios from 'axios';
 import { Loader2, Pencil } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -12,38 +15,53 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-interface TitleFormProps {
-    initialData: {
-        title: string;
-    };
+interface WorkExperienceFormProps {
+    initialData: Job;
     jobId: string;
-
 }
 
-const TitleFormSchema = z.object({
-    title: z.string().trim().min(1, {message: "Title is required"})
+let options = [
+    {
+        value: "0",
+        label: "Fresher",
+    },
+    {
+        value: "2",
+        label: "0-2 Years",
+    },
+    {
+        value: "3",
+        label: "2-4 Years",
+    },
+    {
+        value: "5",
+        label: "5+ Years",
+    },
+]
+
+const WorkModeExperienceFormSchema = z.object({
+    yearsOfExperience: z.string().trim().min(1)
 });
 
-
-
-
-const TitleForm = ({initialData, jobId}: TitleFormProps) => {
-
+const WorkExperienceForm = ({initialData, jobId }: WorkExperienceFormProps) => {
+    
     const [isEditing, setIsEditing] = useState(false);
     
     const router = useRouter();
 
-    const form = useForm<z.infer<typeof TitleFormSchema>>({
-        resolver: zodResolver(TitleFormSchema),
-        defaultValues: initialData,
+    const form = useForm<z.infer<typeof WorkModeExperienceFormSchema>>({
+        resolver: zodResolver(WorkModeExperienceFormSchema),
+        defaultValues: {
+            yearsOfExperience: initialData?.yearsOfExperience || ""
+        },
     });
 
     const { isSubmitting, isValid } = form.formState;
 
-    const handleTitleFormSubmit = async (values: z.infer<typeof TitleFormSchema>) => {
+    const handleWorkModeFormSubmit = async (values: z.infer<typeof WorkModeExperienceFormSchema>) => {
         try {
             const { data } = await axios.patch(`/api/jobs/${jobId}`, values);
-            toast.success("Job title updated");
+            toast.success("Job work experience updated");
             toggleEditing();
             router.refresh();
         } catch (error) {
@@ -52,11 +70,12 @@ const TitleForm = ({initialData, jobId}: TitleFormProps) => {
     }
 
     const toggleEditing = () => setIsEditing((prevState) => !prevState)
+    const selectedOption = options.find((option) => option.value=== initialData.workMode);
 
   return (
     <div className='mt-4 border bg-neutral-100 rounded-md p-4'>
-        <div className="font-medium flex items-center justify-between mb-2 ">
-            Title
+        <div className="font-medium flex items-center justify-between mb-2">
+            Years of Experience
             <Button variant={"ghost"} onClick={toggleEditing}>
                 {isEditing 
                 ? "Cancel" 
@@ -68,19 +87,22 @@ const TitleForm = ({initialData, jobId}: TitleFormProps) => {
             </Button>
         </div>
         {
-            !isEditing && <p className='text-sm mt-2'>{initialData.title}</p>
+            !isEditing && (
+            <p className={cn("text-sm mt-2", !initialData.workMode && "text-neutral-500 italic")}>
+                { selectedOption?.label || "No Work Experience" }
+            </p>)
         }
         {
             isEditing && (
                 <Form {...form} >
-                    <form onSubmit={form.handleSubmit(handleTitleFormSubmit)} className='flex flex-col gap-y-3'>
+                    <form onSubmit={form.handleSubmit(handleWorkModeFormSubmit)} className='flex flex-col gap-y-3'>
                         <FormField  
                          control={form.control}
-                         name='title'
+                         name='yearsOfExperience'
                          render={({field}) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input placeholder='e.g Fullstack Developer' disabled={isSubmitting} {...field} />
+                                    <Combobox options={options} heading='Years of Experience' {...field} /> 
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -88,8 +110,7 @@ const TitleForm = ({initialData, jobId}: TitleFormProps) => {
                         />
                         <div className="flex items-center gap-x-2">
                             <Button type='submit' disabled={isSubmitting || !isValid}>
-                                { isSubmitting ? <Loader2 className='h-4 w-4 animate-spin' /> : "Save" }
-                                
+                                { isSubmitting ?  <Loader2 className='h-4 w-4 animate-spin' /> : "Save" }
                             </Button>
                         </div>
                     </form>
@@ -100,4 +121,4 @@ const TitleForm = ({initialData, jobId}: TitleFormProps) => {
   )
 }
 
-export default TitleForm
+export default WorkExperienceForm
