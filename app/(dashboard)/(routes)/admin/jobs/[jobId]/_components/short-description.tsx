@@ -88,7 +88,7 @@ const ShortDescription = ({initialData, jobId }: ShortDescriptionFormProps) => {
         </div>
         {
             !isEditing && (
-            <p className={cn("text-sm mt-2 text-neutral-500 italic")}>
+            <p className={cn("text-sm mt-2", !initialData.short_desciption && "italic text-neutral-500")}>
                 { initialData.short_desciption || "No Short Description" }
             </p>)
         }

@@ -96,9 +96,26 @@ const TagsForm = ({initialData, jobId }: TagsFormProps) => {
         </div>
         {
             !isEditing && (
-            <p className={cn("text-sm mt-2", !initialData.tags.length && "text-neutral-500 italic")}>
-             {initialData.tags || "No Tags"}
-            </p>)
+                <div className="flex items-center gap-2 flex-wrap">
+                    {
+                        jobTags.length > 0 ?(
+                            jobTags.map((tag, index) => (
+                            <div key={`${tag}-${index}`} className="text-xs flex items-center gap-1 whitespace-nowrap py-1 px-2 rounded-md bg-purple-100">
+                                    {tag}
+                                    {isEditing && (
+                                        <Button onClick={() => handleTagRemove(index)} className='h-5 w-5' variant={"ghost"} size={"icon"}>
+                                            <X className='h-3 w-3' />
+                                        </Button>
+                                    ) }
+                            </div>
+
+                            ))
+
+                        ): <p>No Tags</p>
+                    }
+
+                </div>
+            )
         }
         {
             isEditing && (

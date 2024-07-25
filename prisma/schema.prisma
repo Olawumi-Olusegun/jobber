@@ -29,12 +29,26 @@ model Job {
   yearsOfExperience String?
   workMode          String?
 
-  categoryId String?   @db.ObjectId
-  category   Category? @relation(fields: [categoryId], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  categoryId  String?      @db.ObjectId
+  category    Category?    @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  companyId   String?      @db.ObjectId
+  company     Company?     @relation(fields: [companyId], references: [id])
+  attachments Attachment[]
 
   @@index([categoryId])
+  @@index([companyId])
+}
+
+model Attachment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  url       String
+  name      String
+  jobId     String?  @db.ObjectId
+  job       Job?     @relation(fields: [jobId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
@@ -43,4 +57,27 @@ model Category {
   jobs      Job[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Company {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String
+  name           String
+  description    String
+  logo           String?
+  coverImage     String?
+  mail           String?
+  website        String?
+  linkedIn       String?
+  address_line_1 String?
+  address_line_2 String?
+  city           String?
+  state          String?
+  zipcode        String?
+  jobs           Job[]
+  followers      String[]
+  overview       String?
+  whyJoinUs      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

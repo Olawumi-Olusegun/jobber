@@ -1,7 +1,7 @@
 
 import prismadb from '@/lib/prismadb';
 import { auth } from '@clerk/nextjs/server';
-import { ArrowLeft, LayoutDashboard, ListCheck } from 'lucide-react';
+import { ArrowLeft, Building2, File, LayoutDashboard, ListCheck } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import JobPublishAction from './_components/job-publish-action';
@@ -17,6 +17,8 @@ import WorkModeModeForm from './_components/work-mode-form';
 import WorkExperienceForm from './_components/work-experience';
 import JobDescription from './_components/job-description';
 import TagsForm from './_components/tags-form';
+import CompanyForm from './_components/company-form';
+import AttachementForm from './_components/attachment-form';
 
 const JobDetailsPage = async ({params}: {params: { jobId: string }}) => {
   const isValidObjectId = /^[0-9a-fA-F]{24}$/;
@@ -32,11 +34,23 @@ const JobDetailsPage = async ({params}: {params: { jobId: string }}) => {
   }
 
   const job = await prismadb.job.findUnique({
-    where: { id: params.jobId, userId }
+    where: { id: params.jobId, userId },
+    include: {
+      attachments: {
+        orderBy: {
+          createdAt: "desc"
+        }
+      }
+    }
   });
 
   const categories = await prismadb.category.findMany({
     orderBy: { name: "asc" }
+  });
+
+  const companies = await prismadb.company.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" }
   });
 
   if(!job) {
@@ -82,7 +96,7 @@ const JobDetailsPage = async ({params}: {params: { jobId: string }}) => {
           )
         }
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-          <div className="">
+          <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-x-2">
               <IconBadge icon={LayoutDashboard}  />
               <h2 className='text-xl text-neutral-700 font-medium'>Customize your job</h2>
@@ -97,13 +111,42 @@ const JobDetailsPage = async ({params}: {params: { jobId: string }}) => {
             <WorkModeModeForm initialData={job} jobId={job.id}/>
             <WorkExperienceForm initialData={job} jobId={job.id}/>
           </div>
-          <div className="space-y-6">
+          
+          <div className="space-y-6 col-span-2 md:col-span-1">
             <div className="">
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={ListCheck} />
                 <h2 className="text-xl text-neutral-700">Job Requirements</h2>
               </div>
               <TagsForm initialData={job} jobId={job.id} />
+
+            </div>
+
+            <div className="">
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={Building2} />
+                <h2 className="text-xl text-neutral-700">Company Details</h2>
+              </div>
+    
+              <CompanyForm  
+               jobId={job.id}
+               initialData={job}
+               options={companies.map((company) => ({ label: company.name, value: company.id}))}
+              />
+
+            </div>
+
+            <div className="">
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={File} />
+                <h2 className="text-xl text-neutral-700">Job Attachment</h2>
+              </div>
+    
+              <AttachementForm  
+               jobId={job.id}
+               initialData={job}
+              />
+
             </div>
           </div>
 
