@@ -1,4 +1,5 @@
 "use client";
+import SearchContainer from '@/components/SearchContainer';
 import { Button } from '@/components/ui/button';
 import { UserButton } from '@clerk/nextjs';
 import { LogOut } from 'lucide-react';
@@ -15,6 +16,13 @@ const NavbarRoutes = () => {
 
   return (
     <>
+    {
+      isAdminPage && (
+        <div className="hidden md:flex w-full px-2 pr-8 items-center gap-x-6">
+          <SearchContainer />
+        </div>
+      )
+    }
      <div className="flex gap-x-2 ml-auto">
         {
             isAdminPage || isJobsPage
