@@ -88,8 +88,8 @@ const WorkExperienceForm = ({initialData, jobId }: WorkExperienceFormProps) => {
         </div>
         {
             !isEditing && (
-            <p className={cn("text-sm mt-2", !initialData.workMode && "text-neutral-500 italic")}>
-                { selectedOption?.label || "No Work Experience" }
+            <p className={cn("text-sm mt-2", !initialData.yearsOfExperience && "text-neutral-500 italic")}>
+                { `${initialData.yearsOfExperience} yrs` || "No Work Experience" }
             </p>)
         }
         {

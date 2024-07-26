@@ -6,7 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Attachment, Job } from '@prisma/client';
 import axios from 'axios';
-import { File, Loader2, Pencil, X } from 'lucide-react';
+import { File, Loader2, Pencil, Trash, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
@@ -26,7 +26,9 @@ const ImageFormSchema = z.object({
 const AttachementForm = ({initialData, jobId}: AttachementFormProps) => {
 
     const [isEditing, setIsEditing] = useState(false);
-    
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+
     const router = useRouter();
 
     const initialAttachments = Array.isArray(initialData?.attachments)
@@ -53,15 +55,34 @@ const AttachementForm = ({initialData, jobId}: AttachementFormProps) => {
     const { isSubmitting, isValid } = form.formState;
 
     const handleFormSubmit = async (values: z.infer<typeof ImageFormSchema>) => {
+        if(!values) return;
         try {
             await axios.post(`/api/jobs/${jobId}/attachments`, values);
             toast.success("Job attachments updated");
+            form.setValue("attachments", [])
             toggleEditing();
             router.refresh();
         } catch (error) {
             toast.error((error as any)?.message);
         }
     }
+
+    const handleDeleteImage = async (attachment: Attachment) => {
+        if(!attachment.id || !jobId) return;
+        try {
+            setIsDeleting(true)
+            setDeletingId(attachment.id)
+            await axios.delete(`/api/jobs/${jobId}/attachments/${attachment.id}`);
+            toast.success("Attachments removed");
+            router.refresh();
+        } catch (error) {
+            console.log(error);
+            toast.error((error as any)?.message);
+        } finally {
+            setIsDeleting(false)
+        }
+    }
+
 
 
 
@@ -84,18 +105,23 @@ const AttachementForm = ({initialData, jobId}: AttachementFormProps) => {
         {
             !isEditing && (initialData.attachments.length > 0
                 ? initialData?.attachments.map((attachment) => (
-                    <div key={attachment.url} className="relative flex items-center mb-2 p-3 w-full rounded-md bg-purple-100 border-purple-200 border text-purple-700">
-                        <File className='w-4 h-4 mr-2' />
-                        <p  className="text-xs w-full truncate">{attachment.name}</p>
-                        <Button  onClick={() => {}} type='button' variant={"ghost"} size={"icon"} className='disabled:cursor-not-allowed h-8 w-8'>
-                            <X className='h-4 w-4' />
-                        </Button>
+                    <div key={attachment.url} className="relative flex items-center gap-x-1.5 mb-2 p-3 w-full rounded-md bg-purple-100 border-purple-200 border text-purple-700">
+                        <File className='w-4 h-4' />
+                        <p  className="text-xs w-full flex-1 truncate">{attachment.name}</p>
+
+                        {
+                            deletingId === attachment.id ? <Button  variant={"ghost"} size={"icon"} className='cursor-default size-8 hover:bg-transparent'>
+                                                                <Loader2 className='size-4 animate-spin' />
+                                                            </Button>
+                                                         :  <Button  onClick={() => handleDeleteImage(attachment)}  variant={"ghost"} size={"icon"} className='disabled:cursor-not-allowed size-8'>
+                                                                <X className='size-4' />
+                                                            </Button>
+                        }
                     </div>
                 ))
-                : <div className="relative w-full h-60 aspect-video mt-2">
-                   
-                </div>
-            ) 
+                : <p className='italic text-neutral-500'>No attachments</p>
+            )
+            
         }
         {
             isEditing && (
@@ -111,9 +137,10 @@ const AttachementForm = ({initialData, jobId}: AttachementFormProps) => {
                                      value={field.value}
                                      disabled={isSubmitting}
                                      onChange={(attachments) => {
-                                        field.onChange(attachments?.map((item) => item))
+                                        if(attachments) {
+                                            handleFormSubmit({attachments})
+                                        }
                                      } }
-                                     onRemove={() => field.onChange("")}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -121,9 +148,8 @@ const AttachementForm = ({initialData, jobId}: AttachementFormProps) => {
                          )}
                         />
                         <div className="flex items-center gap-x-2">
-                            <Button type='submit' disabled={isSubmitting || !isValid}>
+                            <Button type='submit' disabled={isSubmitting || !isValid || isDeleting }>
                                 { isSubmitting ? <Loader2 className='h-4 w-4 animate-spin' /> : "Save" }
-                                
                             </Button>
                         </div>
                     </form>

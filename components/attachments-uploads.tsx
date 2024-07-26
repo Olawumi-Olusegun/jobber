@@ -16,11 +16,10 @@ interface Image {
 interface AttachmentsUploadProps {
     disabled?: boolean;
     onChange: (value: Image[]) => void;
-    onRemove: (value: string) => void;
     value: Image[];
 }
 
-const AttachmentsUpload = ({disabled, onChange, onRemove, value}: AttachmentsUploadProps) => {
+const AttachmentsUpload = ({disabled, onChange, value}: AttachmentsUploadProps) => {
     const [isMounted, setIsMounted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -80,33 +79,15 @@ const AttachmentsUpload = ({disabled, onChange, onRemove, value}: AttachmentsUpl
                     if(completedFiles === files.length) {
                         setIsLoading(false)
                         onChange([ ...value, ...newUrls ])
-                        toast.success("Image uploaded")
+                        toast.success("File uploaded")
                     }
 
                 }).catch((error) => {
-                    toast.success(error?.message)
+                    toast.error(error?.message)
                 })
             });
         })
 
-    }
-
-    const handleDeleteImage = (item: Image) => {
-        setIsDeleting(true)
-        const newValue = value.filter(data => data.name !==  item.name);
-        onChange(newValue);
-        deleteObject(ref(storage, item.url))
-        .then(() => {
-            toast.success("File deleted")
-            onRemove(item.url)
-        }).catch((error: any) => {
-            if(error.code == "storage/object-not-found") {
-                return toast.success("Image not found")
-            }
-            toast.success(error?.message)
-        }).finally(() => {
-            setIsDeleting(false)
-        })
     }
 
 
@@ -121,14 +102,14 @@ const AttachmentsUpload = ({disabled, onChange, onRemove, value}: AttachmentsUpl
 
   return (
     <div>
-        <div className="w-full p-2 flex items-center justify-end">
+        <div className="w-full p-2 flex items-center justify-center">
             { isLoading
             ? <p className=''>{`${progress.toFixed()}%`}</p>
             : <>
             <label htmlFor='attachment-image'>
-                <div className="w-full h-full flex gap-2 p-2 rounded-md text-white bg-purple-500 hover:bg-purple-700 duration-300 items-center justify-center cursor-pointer">
+                <div className="w-full h-full flex gap-2 p-2 mb-2 rounded-md text-white bg-purple-500 hover:bg-purple-700 duration-300 items-center justify-center cursor-pointer">
                     <FilePlus className='w-5 h-5 ' />
-                    <p>Add an file</p>
+                    <p>Upload Files</p>
                 </div>
                 <input
                 onChange={handleOnUploadAttachments}
@@ -141,25 +122,6 @@ const AttachmentsUpload = ({disabled, onChange, onRemove, value}: AttachmentsUpl
             </label>
             
             </>
-            }
-        </div>
-        <div className="flex flex-col">
-            {
-                value && value.length > 0
-                        ? <>
-                           <div className="space-y-2">
-                            {value.map((item) => (
-                                <div key={item.url} className="relative flex items-center p-3 w-full rounded-md bg-purple-100 border-purple-200 border text-purple-700">
-                                    <File className='w-4 h-4 mr-2' />
-                                    <p  className="text-xs w-full truncate">{item.name}</p>
-                                    <Button disabled={isDeleting || disabled} onClick={() => handleDeleteImage(item)} type='button' variant={"ghost"} size={"icon"} className='disabled:cursor-not-allowed h-8 w-8'>
-                                        <X className='h-4 w-4' />
-                                    </Button>
-                                </div>
-                            ))}
-                           </div>
-                        </>
-                        : <p className='italic text-neutral-500'>No attachment</p>
             }
         </div>
     </div>

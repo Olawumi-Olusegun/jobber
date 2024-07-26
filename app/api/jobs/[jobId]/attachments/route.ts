@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 
 export const POST = async (req: Request, { params: { jobId }}: {params: { jobId: string }}) => {
+
     try {
 
         const { userId } = auth();
@@ -21,11 +22,23 @@ export const POST = async (req: Request, { params: { jobId }}: {params: { jobId:
             return new NextResponse("Invalid attachment format", {status: 400})
         }
 
-        const createAttachment = [];
+        const createAttachments = [];
 
         for (const attachment of attachments) {
             const { url, name } = attachment;
-            if(!url || !name) {
+
+            // if(!url || !name) {
+            //     continue;
+            // }
+
+            const existingAttachment = await prismadb.attachment.findFirst({
+                where: {
+                    jobId,
+                    url,
+                }
+            });
+
+            if(existingAttachment) {
                 continue;
             }
 
@@ -37,12 +50,11 @@ export const POST = async (req: Request, { params: { jobId }}: {params: { jobId:
                 }
             })
 
-            createAttachment.push(createdAttachment)
+            createAttachments.push(createdAttachment)
         }
 
+        return  NextResponse.json(createAttachments, {status: 200})
 
-        return  NextResponse.json(createAttachment, {status: 200})
-        
     } catch (error) {
         console.log(`[JOB_ATTACHMENT_POST] ${error}`)
         return new NextResponse("Internal server error", {status: 500})
