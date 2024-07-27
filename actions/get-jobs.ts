@@ -34,10 +34,8 @@ export const getJobs = async ({title, categoryId, createdAt, shiftTiming, yearsO
 
         const jobs = await prismadb.job.findMany(query);
 
+        return jobs;
         
-
-
-        return []
     } catch (error) {
         return []
     }

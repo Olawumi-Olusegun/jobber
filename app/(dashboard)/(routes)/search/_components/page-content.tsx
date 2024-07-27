@@ -2,6 +2,9 @@
 
 import { Job } from "@prisma/client";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion"
+import JobCardItem from "./jobcard-item";
+import { fadeInOut } from "@/animations";
 
 interface PageContentProps {
     jobs: Job[];
@@ -29,7 +32,16 @@ const PageContent = ({jobs, userId}: PageContentProps) => {
     }
 
   return (
-    <div>PageContent</div>
+    <AnimatePresence>
+        <motion.div
+         {...fadeInOut}
+         layout
+        className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-6 gap-2">
+            {jobs.map((job) => (
+                <JobCardItem key={job.id} job={job} userId={userId} />
+            ))}
+        </motion.div>
+    </AnimatePresence>
   )
 }
 
