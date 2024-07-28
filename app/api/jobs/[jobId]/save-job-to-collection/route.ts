@@ -3,10 +3,11 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export const PATCH = async (request: Request, { params: { jobId } }: { params: { jobId: string; } }) => {
+
     try {
-        
+
         const { userId } = auth();
-        
+
         if(!userId) {
             return NextResponse.json("Unauthorized", {status: 401})
         }
@@ -36,10 +37,9 @@ export const PATCH = async (request: Request, { params: { jobId } }: { params: {
                 userId,
             },
             data: updatedData
-        })
+        });
 
         return NextResponse.json(updatedJob, { status: 200 });
-
 
     } catch (error) {
         console.log(`[JOB_PUBLISH_PATCH]: ${error}`)

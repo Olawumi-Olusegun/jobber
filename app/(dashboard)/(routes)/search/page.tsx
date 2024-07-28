@@ -19,7 +19,7 @@ interface SearchProps {
 }
 
 const SearchPage = async ({searchParams}: SearchProps) => {
-   
+
     const { userId  } = auth();
     const categories = await prismadb.category.findMany({
         orderBy: {

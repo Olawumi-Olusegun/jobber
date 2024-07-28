@@ -17,7 +17,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+
   
 
 interface JobCardItemProps {
@@ -25,7 +26,29 @@ interface JobCardItemProps {
     userId: string | null;
 }
 
+const experienceData = [
+    {
+      value: "0",
+      label: "Fresher",
+    },
+    {
+      value: "2",
+      label: "0-2 years",
+    },
+    {
+      value: "3",
+      label: "2-4 years",
+    },
+    {
+      value: "5",
+      label: "5+ years",
+    },
+  ];
+
 const JobCardItem = ({job, userId}: JobCardItemProps) => {
+    const pathname = usePathname();
+    console.log({userId})
+    console.log("JOBS:::", job)
 
     const [isBookmarkLoading, setBookmarkLoading] = useState(false);
 
@@ -39,9 +62,6 @@ const JobCardItem = ({job, userId}: JobCardItemProps) => {
 
     const SavedUsersIcon  = isSavedByUser ? BookmarkCheck : Bookmark;
 
-    console.log({userId})
-    console.log({isSavedByUser})
-
 
     const handleSavedJob = async () => {
         try {
@@ -53,8 +73,7 @@ const JobCardItem = ({job, userId}: JobCardItemProps) => {
                 await axios.patch(`/api/jobs/${job.id}/save-job-to-collection`)
                 toast.success("Job saved")
             }
-          
-            router.refresh();
+            router.refresh()
         } catch (error) {
             toast.error((error as any)?.message)
         } finally {
@@ -62,8 +81,15 @@ const JobCardItem = ({job, userId}: JobCardItemProps) => {
         }
     }
 
+    const getExperinceLabel = (value: string) => {
+        const experience = experienceData.find((exp) => exp.value === value);
+        return experience ? experience.label : "N/A";
+    }
+
   return (
-    <motion.div layout>
+    <motion.div 
+    key={pathname}
+    layout={true}>
         <Card>
         <div  className="w-full h-full p-4 flex flex-col items-start justify-start gap-y-4">
             <Box>
@@ -119,7 +145,7 @@ const JobCardItem = ({job, userId}: JobCardItemProps) => {
                 {job.yearsOfExperience && (
                     <div className="flex items-center text-xs text-muted-foreground ">
                         <Network className="w-3 h-3 mr-1" />
-                        {formattedString(job.yearsOfExperience)} yrs
+                        {getExperinceLabel(job.yearsOfExperience)}
                     </div>
                 )}
             </Box>

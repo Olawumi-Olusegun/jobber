@@ -17,8 +17,8 @@ const NavbarRoutes = () => {
   return (
     <>
     {
-      isAdminPage && (
-        <div className="hidden md:flex w-full px-2 pr-8 items-center gap-x-6">
+      !isAdminPage && (
+        <div className="hidden md:flex w-full pl-60 px-2 pr-8 items-center gap-x-6">
           <SearchContainer />
         </div>
       )
@@ -28,7 +28,7 @@ const NavbarRoutes = () => {
             isAdminPage || isJobsPage
             ? <Button asChild variant={"outline"} size={"sm"} className='border-purple-700/20'>
                 <Link href={"/"}>
-                    <LogOut size={16} className='mr-1' /> Exit
+                    <LogOut size={16} className='mr-1' /> <span>Exit</span>
                 </Link>
               </Button>
             : <Button asChild variant={"outline"} size={"sm"} className='border-purple-700/20 px-2'>

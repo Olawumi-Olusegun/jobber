@@ -1,7 +1,7 @@
 "use client"
 
-import { cn } from "@/lib/utils"
 import React, { ComponentPropsWithRef } from "react"
+import { cn } from "@/lib/utils"
 
 interface BoxProps extends ComponentPropsWithRef<"div"> {}
 

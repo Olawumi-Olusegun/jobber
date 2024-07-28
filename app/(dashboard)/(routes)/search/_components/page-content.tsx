@@ -13,6 +13,7 @@ interface PageContentProps {
 
 const PageContent = ({jobs, userId}: PageContentProps) => {
 
+    
 
     if(jobs.length === 0) {
         return <div className="flex items-center justify-center flex-col">
@@ -32,16 +33,19 @@ const PageContent = ({jobs, userId}: PageContentProps) => {
     }
 
   return (
-    <AnimatePresence>
-        <motion.div
-         {...fadeInOut}
-         layout
-        className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-6 gap-2">
-            {jobs.map((job) => (
-                <JobCardItem key={job.id} job={job} userId={userId} />
-            ))}
-        </motion.div>
-    </AnimatePresence>
+    <div className="my-6">
+        <AnimatePresence mode="wait" >
+            <motion.div
+            {...fadeInOut}
+            layout={true}
+            
+            className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-6 gap-2">
+                {jobs.map((job) => (
+                    <JobCardItem key={job.id} job={job} userId={userId} />
+                ))}
+            </motion.div>
+        </AnimatePresence>
+    </div>
   )
 }
 
