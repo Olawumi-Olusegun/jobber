@@ -47,8 +47,6 @@ const experienceData = [
 
 const JobCardItem = ({job, userId}: JobCardItemProps) => {
     const pathname = usePathname();
-    console.log({userId})
-    console.log("JOBS:::", job)
 
     const [isBookmarkLoading, setBookmarkLoading] = useState(false);
 

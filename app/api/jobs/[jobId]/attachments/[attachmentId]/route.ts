@@ -41,7 +41,7 @@ export const DELETE = async (req: Request, { params: { jobId, attachmentId }}: {
             }
         });
 
-        return  NextResponse.json(attachment, {status: 200})
+        return  NextResponse.json({message: "Attachment deleted"}, {status: 200})
 
     } catch (error) {
         console.log(`[JOB_ATTACHMENT_DELETE] ${error}`)

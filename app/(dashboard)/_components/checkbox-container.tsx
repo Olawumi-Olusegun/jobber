@@ -16,6 +16,7 @@ interface CheckBoxContainerProps {
 }
 
 const CheckBoxContainer = ({data, onChange}: CheckBoxContainerProps) => {
+    
     const [filters, setFilters] = useState<AppliedFilter[]>(data);
 
     const handleCheckedChange = (applied: AppliedFilter) => {

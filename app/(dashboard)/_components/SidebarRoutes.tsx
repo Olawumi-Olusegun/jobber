@@ -66,7 +66,6 @@ const guestRoutes = [
     },
 ];
 
-
 const shiftTimingsData = [
     {
       value: "full-time",
@@ -119,7 +118,7 @@ const experienceData = [
 const SidebarRoutes = () => {
     const pathname = usePathname();
     const router = useRouter();
-
+    
     const isAdminRoute = pathname?.startsWith("/admin");
 
     const isSearchPage = pathname?.startsWith("/search");

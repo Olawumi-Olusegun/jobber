@@ -1,5 +1,6 @@
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
+import { Attachment } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 
@@ -22,7 +23,7 @@ export const POST = async (req: Request, { params: { jobId }}: {params: { jobId:
             return new NextResponse("Invalid attachment format", {status: 400})
         }
 
-        const createAttachments = [];
+        const createAttachments: Attachment[] = [];
 
         for (const attachment of attachments) {
             const { url, name } = attachment;
@@ -39,6 +40,7 @@ export const POST = async (req: Request, { params: { jobId }}: {params: { jobId:
             });
 
             if(existingAttachment) {
+                console.log(`Attachment with URL: ${url} already exist`)
                 continue;
             }
 

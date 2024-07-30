@@ -101,13 +101,13 @@ const AttachmentsUpload = ({disabled, onChange, value}: AttachmentsUploadProps) 
 
 
   return (
-    <div>
-        <div className="w-full p-2 flex items-center justify-center">
+    <div className='h-full'>
+        <div className="w-full h-full p-2 flex items-center justify-center">
             { isLoading
             ? <p className=''>{`${progress.toFixed()}%`}</p>
             : <>
-            <label htmlFor='attachment-image'>
-                <div className="w-full h-full flex gap-2 p-2 mb-2 rounded-md text-white bg-purple-500 hover:bg-purple-700 duration-300 items-center justify-center cursor-pointer">
+            <label htmlFor='attachment-image' className=' w-full h-full'>
+                <div className="w-full h-full flex gap-2 p-2 mb-2 rounded-md text-white bg-purple-400 hover:bg-purple-700 duration-300 items-center justify-center cursor-pointer">
                     <FilePlus className='w-5 h-5 ' />
                     <p>Upload Files</p>
                 </div>
