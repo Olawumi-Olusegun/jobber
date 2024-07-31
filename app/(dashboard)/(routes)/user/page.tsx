@@ -30,7 +30,7 @@ const ProfilePage = async () => {
                 }
             }
         }
-    })
+    });
 
   return (
     <div className='flex flex-col p-4 md:p-8 items-center justify-center'>

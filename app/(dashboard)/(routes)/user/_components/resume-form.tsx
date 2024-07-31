@@ -138,24 +138,24 @@ const ResumeForm = ({initialData, userId}: ResumeFormProps) => {
             !isEditing && (initialData?.resumes && initialData?.resumes?.length > 0
                 ? initialData?.resumes.map((resume) => (
                     <div key={resume.url}  className="grid grid-cols-12 w-full gap-1.5 items-center">
-                        <div className="col-span-10 relative flex items-center gap-x-1.5 mb-2 p-3 w-full rounded-md bg-purple-100 border-purple-200 border text-purple-700">
+                        <div className="col-span-9 md:col-span-10 relative flex items-center gap-x-1.5 mb-2 p-3 w-full rounded-md bg-purple-100 border-purple-200 border text-purple-700">
                         <File className='w-4 h-4' />
                         <p  className="text-xs w-full flex-1 truncate">{resume.name}</p>
 
                         {
                             deletingId === resume.id ? <Button  variant={"ghost"} size={"icon"} className='cursor-default size-8 hover:bg-transparent'>
-                                                                <Loader2 className='size-4 animate-spin' />
-                                                            </Button>
-                                                         :  <Button  onClick={() => handleDeleteImage(resume)}  variant={"ghost"} size={"icon"} className='disabled:cursor-not-allowed size-8'>
-                                                                <X className='size-4' />
-                                                            </Button>
+                                                            <Loader2 className='size-4 animate-spin' />
+                                                        </Button>
+                                                    :  <Button  onClick={() => handleDeleteImage(resume)}  variant={"ghost"} size={"icon"} className='disabled:cursor-not-allowed size-8'>
+                                                            <X className='size-4' />
+                                                       </Button>
                         }
                     </div>
 
-                    <div className="col-span-2 flex items-center justify-start ">
+                    <div className="col-span-3 md:col-span-2 flex items-center justify-center w-full">
                         {activeResumeId === resume.id  
                             ? <Loader2 className='w-4 h-4 animate-spin' />
-                            : <Button onClick={() => setActiveResume(resume)} variant={"ghost"} className={cn("flex items-center justify-center", initialData.activeResumeId === resume.id ? "text-emerald-500" : "text-red-500")}>
+                            : <Button disabled={isSubmitting} onClick={() => setActiveResume(resume)} variant={"ghost"} className={cn("w-full flex items-center justify-center", initialData.activeResumeId === resume.id ? "text-emerald-500" : "text-red-500")}>
                                 {
                                   initialData.activeResumeId === resume.id ? "Live" : "Activate"  
                                 }

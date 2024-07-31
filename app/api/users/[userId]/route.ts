@@ -30,7 +30,7 @@ export const PATCH = async (request: Request) => {
             })
         }
 
-        return NextResponse.json("", { status: 200 });
+        return NextResponse.json(userProfile, { status: 200 });
 
 
     } catch (error) {
