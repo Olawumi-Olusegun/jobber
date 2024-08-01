@@ -15,6 +15,7 @@ const DashboardLayout = ({children}: {children: ReactNode}) => {
         <main className='lg:ml-56  pt-20 h-dvh'>
             {children}
         </main>
+        
     </div>
   )
 }

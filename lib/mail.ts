@@ -1,7 +1,8 @@
 import nodemailer from "nodemailer";
-import handlebars from "handlebars";
-import { toast } from "sonner";
+import Handlebars from "handlebars";
 import { ThankYouTemplate } from "./designs/thank-you";
+import { SendSelectedTemplate } from "./designs/send-selected";
+import { SendRejectionTemplate } from "./designs/send-rejection-template";
 
 
 interface SendEmailProps {
@@ -27,8 +28,7 @@ export const sendEmail = async ({ to, subject, body, name }: SendEmailProps) => 
         const textResult = await transport.verify();
         console.log(textResult)
     } catch (error) {
-        toast.error((error as Error)?.message)
-        return;
+        console.log(error)
     }
 
     try {
@@ -41,12 +41,28 @@ export const sendEmail = async ({ to, subject, body, name }: SendEmailProps) => 
         console.log(sendResult)
         return sendResult;
     } catch (error) {
-        toast.error((error as Error)?.message)
+        console.log(error)
     }
 }
 
 export const CompileThankYouEmailTemplate = (name: string) => {
-    const template = handlebars.template(ThankYouTemplate);
+    const template = Handlebars.compile(ThankYouTemplate);
+    
+    const htmlBody = template({ name: name });
+
+    return htmlBody;
+}
+
+export const CompileSendSelectedEmailTemplate = (name: string) => {
+    const template = Handlebars.compile(SendSelectedTemplate);
+    
+    const htmlBody = template({ name: name });
+
+    return htmlBody;
+}
+
+export const CompileSendRejectedEmailTemplate = (name: string) => {
+    const template = Handlebars.compile(SendRejectionTemplate);
     
     const htmlBody = template({ name: name });
 

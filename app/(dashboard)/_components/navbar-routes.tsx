@@ -17,7 +17,7 @@ const NavbarRoutes = () => {
   return (
     <>
     {
-      !isAdminPage && (
+      isAdminPage && (
         <div className="hidden md:flex w-full pl-60 px-2 pr-8 items-center gap-x-6">
           <SearchContainer />
         </div>

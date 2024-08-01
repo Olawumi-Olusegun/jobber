@@ -109,6 +109,12 @@ export const getJobs = async ({title, categoryId, createdAtFilter, shiftTiming, 
             }
         }
 
+        if(savedJobs) {
+            query.where.savedUsers = {
+                has: userId
+            }
+        }
+
         const jobs = await prismadb.job.findMany(query);
 
         return jobs;
