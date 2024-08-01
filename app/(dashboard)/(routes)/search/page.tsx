@@ -6,6 +6,7 @@ import React from 'react';
 import CategoriesList from './_components/categories-list';
 import PageContent from './_components/page-content';
 import AppliedFilters from './_components/applied-filters';
+import { redirect } from 'next/navigation';
 
 
 interface SearchProps {
@@ -22,6 +23,11 @@ interface SearchProps {
 const SearchPage = async ({searchParams}: SearchProps) => {
 
     const { userId  } = auth();
+
+    if(!userId) {
+        return redirect("/sign-in")
+    }
+
     const categories = await prismadb.category.findMany({
         orderBy: {
             createdAt: "asc"

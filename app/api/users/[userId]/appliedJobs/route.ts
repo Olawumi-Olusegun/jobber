@@ -14,6 +14,10 @@ export const PATCH = async (request: Request) => {
             return NextResponse.json("Unauthorized", {status: 401})
         }
 
+        if(!jobId) {
+            return NextResponse.json("Job ID is required", {status: 400})
+        }
+
         let userProfile = await prismadb.userProfile.findUnique({
             where: { userId }
         });
@@ -31,7 +35,7 @@ export const PATCH = async (request: Request) => {
                     push: { jobId }
                 }
             }
-        })
+        });
 
         return NextResponse.json(updatedProfile, { status: 200 });
 

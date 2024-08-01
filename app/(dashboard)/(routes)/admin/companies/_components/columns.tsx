@@ -11,7 +11,7 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, Eye, ImageIcon, MoreHorizontal, Pencil } from "lucide-react";
+import { ArrowUpDown, ImageIcon, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -62,20 +62,6 @@ export const columns: ColumnDef<CompanyColumns>[] = [
       )
     },
   },
-//   {
-//     accessorKey: "company",
-//     header: ({ column }) => {
-//       return (
-//         <Button
-//           variant="ghost"
-//           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-//         >
-//           Company
-//           <ArrowUpDown className="ml-2 h-4 w-4" />
-//         </Button>
-//       )
-//     },
-//   },
 
   {
     accessorKey: "createdAt",

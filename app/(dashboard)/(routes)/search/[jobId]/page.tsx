@@ -12,6 +12,14 @@ const JobDetailsPage = async ({params: { jobId }}: {params: {jobId: string;}}) =
 
     const { userId } = auth();
 
+    if(!userId) {
+        return redirect("/sign-in")
+    }
+
+    if(!jobId) {
+        return redirect("/search")
+    }
+
     const job = await prismadb.job.findUnique({
         where: { id: jobId },
         include: {
@@ -55,7 +63,7 @@ const JobDetailsPage = async ({params: { jobId }}: {params: {jobId: string;}}) =
                  </Box>
 
                  <PageContent jobs={filterJobs} userId={userId} />
-                 
+
                 </>
             )
         }

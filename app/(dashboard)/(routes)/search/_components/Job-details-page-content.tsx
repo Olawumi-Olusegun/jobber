@@ -6,7 +6,6 @@ import CustomBreadCrumb from "@/components/custom-bread-crumb";
 import EditorPreview from "@/components/editor-preview";
 import { Banner } from "@/components/ui/banner";
 import { Button } from "@/components/ui/button";
-import { sendEmail } from "@/lib/mail";
 import { Attachment, Company, Job, Resumes, UserProfile } from "@prisma/client";
 import axios from "axios";
 import { FileIcon } from "lucide-react";
@@ -46,13 +45,17 @@ const JobDetailsPageContent = ({job, jobId, userProfile}: JobDetailsPageContentP
 
     try {
 
-      await axios.patch(`/api/users/${userProfile?.userId}/appliedJobs`, jobId)
+      await Promise.all([
+        axios.patch(`/api/users/${userProfile?.userId}/appliedJobs`, jobId),
 
-      await axios.patch(`/api/thank-you/`, {
-                        fullName: userProfile?.fullName,
-                        email: userProfile?.email,
-                      })
-          toast.success("Job Applied")
+        axios.post(`/api/thank-you/`, {
+          fullName: userProfile?.fullName,
+          email: userProfile?.email,
+        }),
+      ])
+
+      toast.success("Job Applied");
+
     } catch (error) {
        toast.error((error as any)?.message)
     } finally {
@@ -97,7 +100,7 @@ const JobDetailsPageContent = ({job, jobId, userProfile}: JobDetailsPageContentP
            src={job?.imageUrl}
            alt={job.title}
            fill
-           className="object-cover w-full h-full absolute"
+           className="object-cover w-full h-full absolute pointer-events-none"
           />
           : <div className="w-full h-full bg-purple-100 flex items-center justify-center">
             <h2 className="text-3xl font-semibold tracking-wider">{job.title}</h2>
