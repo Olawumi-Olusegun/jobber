@@ -1,14 +1,17 @@
-
-import { getTotalCompaniesOnPortal, getTotalCompaniesOnPortalByUserId, getTotalJobsOnPortal, getTotalJobsOnPortalByUserId } from '@/actions/get-overview-analytics'
+import React from 'react'
+import { getPieGraphCompanyCreatedByUser, getPieGraphJobCreatedByUser, getTotalCompaniesOnPortal, getTotalCompaniesOnPortalByUserId, getTotalJobsOnPortal, getTotalJobsOnPortalByUserId } from '@/actions/get-overview-analytics'
 import Box from '@/components/Box'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { auth } from '@clerk/nextjs/server'
 import { BriefcaseBusiness } from 'lucide-react'
 import { redirect } from 'next/navigation'
-import React from 'react'
+import OverViewPieChart from '@/components/overview-pie-chart'
+
+
 
 const DashboardAnalyticsPage = async () => {
+
     const { userId } = auth();
 
     if(!userId) {
@@ -20,6 +23,9 @@ const DashboardAnalyticsPage = async () => {
 
     const totalCompaniesOnPortal = await getTotalCompaniesOnPortal();
     const totalCompaniesOnPortalByUser = await getTotalCompaniesOnPortalByUserId(userId);
+
+    const graphJobTotal = await getPieGraphJobCreatedByUser(userId);
+    const graphCompanyTotal = await getPieGraphCompanyCreatedByUser(userId);
 
   return (
     <>
@@ -67,6 +73,27 @@ const DashboardAnalyticsPage = async () => {
                     </CardHeader>
                     <CardContent className='text-2xl font-bold'>
                         {totalCompaniesOnPortalByUser}
+                    </CardContent>
+                </Card>
+
+                {/* PIE CHART FOR JOB AND COMPANY */}
+                <Card className='col-span-1 md:col-span-2'>
+                    <CardHeader className='flex items-center justify-between flex-row '>
+                        <CardTitle className="text-sm font-medium">Month Wise Job Count</CardTitle>
+                        <BriefcaseBusiness className='w-5 h-5' />
+                    </CardHeader>
+                    <CardContent className='text-2xl font-bold'>
+                        <OverViewPieChart data={graphJobTotal} />
+                    </CardContent>
+                </Card>
+
+                <Card className='col-span-1 md:col-span-2'>
+                    <CardHeader className='flex items-center justify-between flex-row '>
+                        <CardTitle className="text-sm font-medium">Month Wise Companies Count</CardTitle>
+                        <BriefcaseBusiness className='w-5 h-5' />
+                    </CardHeader>
+                    <CardContent className='text-2xl font-bold'>
+                        <OverViewPieChart data={graphCompanyTotal} />
                     </CardContent>
                 </Card>
 
