@@ -18,6 +18,8 @@ export const POST = async (request: Request) => {
             return NextResponse.json("Mail delivered", { status: 200})
         }
 
+        return NextResponse.json("Mail delivered", { status: 200})
+
     } catch (error) {
         console.log(`SELECTED_MAIL_POST`, error)
         return NextResponse.json({message: (error as Error)?.message}, { status: 500})

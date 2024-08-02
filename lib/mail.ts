@@ -25,8 +25,9 @@ export const sendEmail = async ({ to, subject, body, name }: SendEmailProps) => 
     });
 
     try {
+        
         const textResult = await transport.verify();
-        console.log(textResult)
+  
     } catch (error) {
         console.log(error)
     }
@@ -38,7 +39,6 @@ export const sendEmail = async ({ to, subject, body, name }: SendEmailProps) => 
             subject,
             html: body
         });
-        console.log(sendResult)
         return sendResult;
     } catch (error) {
         console.log(error)

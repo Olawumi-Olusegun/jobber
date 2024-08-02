@@ -35,7 +35,7 @@ const CellActions =  ({ id, fullName, email }: CellActionsProps) => {
     const handleSendRejected = async () => {
         setIsRejection(true);
         try {
-            await axios.post("/api/send-rejected", {email, fullName})
+            await axios.post("/api/send-rejection", {email, fullName})
             toast.success("Rejection email sent")
         } catch (error) {
             toast.error((error as Error)?.message)
