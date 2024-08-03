@@ -15,7 +15,7 @@ const JobsPageOverview = async () => {
   const { userId } = auth();
 
   if(!userId) {
-    return redirect("/admin/jobs");
+    return redirect("/sign-in");
   }
 
   const jobs = await prismadb.job.findMany({

@@ -30,7 +30,7 @@ const JobDetailsPage = async ({params}: {params: { jobId: string }}) => {
   const { userId } = auth();
 
   if(!userId) {
-    return redirect("/")
+    return redirect("/sign-in")
   }
 
   const job = await prismadb.job.findUnique({
